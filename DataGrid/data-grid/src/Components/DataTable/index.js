@@ -29,7 +29,7 @@ export default class DataTable extends React.Component {
   renderTableHeader = () => {
     let {headers} = this.state;
     headers.sort((a, b) => {
-      if(a.index > b.index) 
+      if(a.index > b.index)
         return 1;
       return -1;
     });
@@ -47,10 +47,10 @@ export default class DataTable extends React.Component {
           <th key={cleanTitle}
               ref={(th) => this[cleanTitle] = th}
               style={{width: width}}
-              data-col={cleanTitle}>>
+              data-col={cleanTitle}>
               <span draggable data-col={cleanTitle} className="header-cell">
                 {title}
-              </span>    
+              </span>
           </th>
         );
     });
@@ -109,7 +109,7 @@ export default class DataTable extends React.Component {
 
     return contentView;
   }//renderContent ended
-  
+
   renderTable = () => {
     let title = this.props.title || "Datatable";
     let headerView = this.renderTableHeader();
@@ -131,7 +131,7 @@ export default class DataTable extends React.Component {
           </tbody>
       </table>
     )
-    
+
   }//renderTable ended
 
   renderNoData = () => {
