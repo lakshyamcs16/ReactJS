@@ -7,7 +7,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     let model = {
-      header: [
+      headers: [
         {title: "Id", accessor: "id", index: 0},
         {title: "Profile", accessor: "profile", width: 80, index: 1, cell: {
             type: "image",
@@ -27,7 +27,7 @@ class App extends Component {
                 height: "1.9em",
                 width: (row/5)*201 + "px",
                 margin: "3px 0 4px 0"
-              }}>{row}</div>
+              }}><a href={`/showchart/${row.id}`}>{row.rating}</a></div>
             </div>
         )},
       ],
@@ -52,6 +52,21 @@ class App extends Component {
 
     this.state = model;
   }
+
+  onUpdateTable = (field, id, value) => {
+    let data = this.state.data.slice();
+    let updateRow = this.state.data.find((d) => {
+      return d["id"] === id;
+    });
+
+    updateRow[field] = value;
+
+    this.setState({
+      edit: null,
+      data: data
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -63,10 +78,12 @@ class App extends Component {
             pageLength: 10,
             type: "long"
           }}
+          edit={true}
           width="100%"
           headers={this.state.headers}
           data={this.state.data}
-          noData="No Records" />
+          noData="No Records"
+          onUpdate={this.onUpdateTable} />
       </div>
     );
   }
