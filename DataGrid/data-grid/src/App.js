@@ -26,9 +26,9 @@ class App extends Component {
                 backgroundColor: "lightSkyBlue",
                 textAlign: "center",
                 height: "1.9em",
-                width: (row/5)*201 + "px",
+                width: (row.rating/5)*201 + "px",
                 margin: "3px 0 4px 0"
-              }}><a href={`/showchart/${row.id}`}>{row.rating}</a></div>
+              }}>{row.rating}</div>
             </div>
         )},
       ],
