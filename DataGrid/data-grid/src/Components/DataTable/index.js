@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import './datatable.css';
 
 export default class DataTable extends React.Component {
@@ -13,17 +14,11 @@ export default class DataTable extends React.Component {
       pagedData: props.data,
       sortby: null,
       descending: null,
-      search: false,
-      pageLength: this.props.pagination.pageLength || 5,
-      currentPage: 1
     }
 
     this.keyField = props.keyField || "id";
     this.noData = props.noData || "No records found!";
     this.width = props.width || "100%";
-
-    this.pagination = this.props.pagination || {};
-
   }//constructor ended
 
   renderTableHeader = () => {
@@ -45,9 +40,12 @@ export default class DataTable extends React.Component {
 
         return (
           <th key={cleanTitle}
-              ref={(th) => this[cleanTitle] = th}
+              ref={(th) => this.th = th}
               style={{width: width}}
-              data-col={cleanTitle}>
+              data-col={cleanTitle}
+              onDragStart={(e) => this.onDragStart(e, index)}
+              onDragOver={this.onDragOver}
+              onDrop={(e) => {this.onDrop(e, index)}}>
               <span draggable data-col={cleanTitle} className="header-cell">
                 {title}
               </span>
@@ -60,11 +58,10 @@ export default class DataTable extends React.Component {
 
   renderContent = () => {
     let {headers} = this.state;
-    let data = this.pagination ? this.state.pagedData : this.state.data;
+    let data = this.state.data;
 
     let contentView = data.map((row, rowIdx) => {
         let id = row[this.keyField];
-        let edit = this.state.edit;
 
         let tds = headers.map((header, index) => {
             let content = row[header.accessor];
@@ -78,19 +75,6 @@ export default class DataTable extends React.Component {
                   content = <img style={cell.style} src={content} alt="profile goes here"/>
                 }
               }
-            }
-
-            if(this.props.edit) {
-                if(header.dataType && (header.dataType === "number" || header.dataType === "string") &&
-                   header.accessor !== this.keyField) {
-                     if(edit && edit.row === rowIdx && edit.cell === index) {
-                       content = (
-                         <form onSubmit={this.onUpdate}>
-                          <input type="text" defaultValue={content} onKeyUp={this.onFormReset} />
-                         </form>
-                       );
-                     }
-                   }
             }
 
             return (
@@ -121,12 +105,12 @@ export default class DataTable extends React.Component {
           {title}
           </caption>
 
-          <thead>
+          <thead onClick={this.onSort}>
               <tr>
                   {headerView}
               </tr>
           </thead>
-          <tbody onDoubleClick={this.onShowEditor}>
+          <tbody>
             {contentView}
           </tbody>
       </table>
@@ -143,36 +127,55 @@ export default class DataTable extends React.Component {
         </tr>
     );
   }
-  onUpdate = (e) => {
+
+  onDragStart = (e, source) => {
+      e.dataTransfer.setData('text/plain', source);
+  }
+
+  onDragOver = (e) => {
     e.preventDefault();
-    let input = e.target.firstChild;
-    let header = this.state.headers[this.state.edit.cell];
-    let rowId = this.state.edit.rowId;
+  }
+
+  onDrop = (e, target) => {
+    e.preventDefault();
+    let headers = [...this.state.headers];
+    let source = e.dataTransfer.getData('text/plain');
+    let sourceHeader = headers[source];
+    let targetHeader = headers[target];
+
+    let temp = sourceHeader.index;
+    sourceHeader.index = targetHeader.index;
+    targetHeader.index = temp;
 
     this.setState({
-      edit: null
+      headers
     });
-
-    this.props.onUpdate && this.props.onUpdate(header.accessor, rowId, input.value);
   }
 
-  onFormReset = (e) => {
-    if(e.keyCode === 27) {
-      this.setState({
-        eidt: null
+  onSort = (e) => {
+      let data = this.state.data.slice(); // Give new array
+      let colIndex = ReactDOM.findDOMNode(e.target).parentNode.cellIndex;
+      let colTitle = e.target.dataset.col;
+
+      let descending = !this.state.descending;
+
+      data.sort((a, b) => {
+          let sortVal = 0;
+          if (a[colTitle] < b[colTitle]) {
+              sortVal = -1;
+          } else if (a[colTitle] > b[colTitle]) {
+              sortVal = 1;
+          }
+          if (descending) {
+              sortVal *= -1;
+          }
+          return sortVal;
       });
-    }
-  }
-
-  onShowEditor = (e) => {
-    let id = e.target.dataset.id;
-    this.setState({
-        edit: {
-            row: parseInt(e.target.dataset.row, 10),
-            rowId: id,
-            cell: e.target.cellIndex
-        }
-    })
+      this.setState({
+          data,
+          sortby: colIndex,
+          descending
+      });
   }
 
   render() {
