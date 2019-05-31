@@ -17,9 +17,9 @@ class App extends Component {
             }
           }
         },
-        {title: "Name", accessor: "name", width: 300, index: 2},
-        {title: "Age", accessor: "age", index: 3},
-        {title: "Qualification", accessor: "qualification", index: 4},
+        {title: "Name", accessor: "name", width: 300, index: 2, dataType: "string"},
+        {title: "Age", accessor: "age", index: 3, dataType: "number"},
+        {title: "Qualification", accessor: "qualification", index: 4, dataType: "string"},
         {title: "Rating", accessor: "rating", index: 5, width: 200, cell: row => (
             <div className="rating">
               <div style={{
@@ -56,8 +56,8 @@ class App extends Component {
 
   onUpdateTable = (field, id, value) => {
     let data = this.state.data.slice();
-    let updateRow = this.state.data.find((d) => {
-      return d["id"] === id;
+    let updateRow = data.find((d) => {
+      return d["id"] === parseInt(id, 10);
     });
 
     updateRow[field] = value;

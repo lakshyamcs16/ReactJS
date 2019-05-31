@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './datatable.css';
 
 export default class DataTable extends React.Component {
-
+  _preSearchData = null
+  
   constructor(props) {
     super(props);
 
@@ -14,6 +15,7 @@ export default class DataTable extends React.Component {
       pagedData: props.data,
       sortby: null,
       descending: null,
+      search: true,
     }
 
     this.keyField = props.keyField || "id";
@@ -40,7 +42,7 @@ export default class DataTable extends React.Component {
 
         return (
           <th key={cleanTitle}
-              ref={(th) => this.th = th}
+              ref={(th) => this[cleanTitle] = th}
               style={{width: width}}
               data-col={cleanTitle}
               onDragStart={(e) => this.onDragStart(e, index)}
@@ -62,7 +64,7 @@ export default class DataTable extends React.Component {
 
     let contentView = data.map((row, rowIdx) => {
         let id = row[this.keyField];
-
+        let edit = this.state.edit;
         let tds = headers.map((header, index) => {
             let content = row[header.accessor];
             let cell = header.cell;
@@ -76,7 +78,22 @@ export default class DataTable extends React.Component {
                 }
               }
             }
+            if (this.props.edit) {
+              
+              if (header.dataType && (header.dataType === "number" ||
+                  header.dataType === "string") &&
+                  header.accessor !== this.keyField) {
+                  if (edit && edit.row === rowIdx && edit.cell === index) {
+                      content = (
+                          <form onSubmit={this.onUpdate}>
+                              <input type="text" defaultValue={content}
+                                  onKeyUp={this.onFormReset} />
+                          </form>
+                      );
+                  }
 
+              }
+            }
             return (
                   <td key={index} data-id={id} data-row={rowIdx}>
                     {content}
@@ -110,7 +127,8 @@ export default class DataTable extends React.Component {
                   {headerView}
               </tr>
           </thead>
-          <tbody>
+          <tbody onDoubleClick={this.onShowEditor}>
+            {/* {this.renderSearch()} */}
             {contentView}
           </tbody>
       </table>
@@ -124,6 +142,50 @@ export default class DataTable extends React.Component {
             <td colSpan={this.props.headers.length}>
                 {this.noData}
             </td>
+        </tr>
+    );
+  }
+
+  renderToolbar = () => {
+    return (
+        <div className="toolbar">
+            <button onClick={this.onToggleSearch}>
+                Search
+            </button>
+        </div>
+
+    );
+  }
+
+  renderSearch = () => {
+    let { search, headers } = this.state;
+    if (!search) {
+        return null;
+    }
+
+    let searchInputs = headers.map((header, idx) => {
+
+        // Get the header ref.
+        let hdr = this[header.accessor];
+        let inputId = 'inp' + header.accessor;
+
+        return (
+            <td key={idx}>
+                <input type="text"
+                    ref={(input) => this[inputId] = input}
+                    style={{
+                        width: hdr.clientWidth - 17 + "px"
+                    }}
+                    data-idx={idx}
+                />
+            </td>
+        );
+
+    });
+
+    return (
+        <tr onChange={this.onSearch}>
+            {searchInputs}
         </tr>
     );
   }
@@ -177,10 +239,96 @@ export default class DataTable extends React.Component {
           descending
       });
   }
+  onShowEditor = (e) => {
+    let id = e.target.dataset.id;
+    this.setState({
+        edit: {
+            row: parseInt(e.target.dataset.row, 10),
+            rowId: id,
+            cell: e.target.cellIndex
+        }
+    })  
+  } 
+  onUpdate = (e) => {
+    e.preventDefault();
+    let input = e.target.firstChild;
+    let header = this.state.headers[this.state.edit.cell];
+    let rowId = this.state.edit.rowId;   
+    
+    this.setState({
+        edit: null
+    });
+
+    this.props.onUpdate &&
+        this.props.onUpdate(header.accessor, rowId, input.value);
+  }
+
+  onFormReset = (e) => {
+      if (e.keyCode === 27) {  // ESC key
+          this.setState({
+              edit: null
+          });
+      }
+  }
+
+  onToggleSearch = (e) => {
+    if (this.state.search) {
+        this.setState({
+            data: this._preSearchData,
+            search: false
+        });
+        this._preSearchData = null;
+    } else {
+        this._preSearchData = this.state.data;
+        this.setState({
+            search: true
+        });
+    }
+  }
+
+  onSearch = (e) => {
+    let { headers } = this.state;
+    // Grab the index of the target column
+
+    // Get the target column
+    let data = this._preSearchData;
+
+    // Filter the records
+    let searchData = data.filter((row) => {
+        let show = true;
+
+        for (let i = 0; i < headers.length; i++) {
+            let fieldName = headers[i].accessor;
+            let fieldValue = row[fieldName];
+            let inputId = 'inp' + fieldName;
+            let input = this[inputId];
+            if (!fieldValue === '') {
+                show = true;
+            } else {
+                show = fieldValue.toString().toLowerCase().indexOf(input.value.toLowerCase()) > -1;
+                if (!show) break;
+            }
+        }
+        return show;
+        //return row[targetCol].toString().toLowerCase().indexOf(needle) > -1;
+    });
+
+    // UPdate the state
+    this.setState({
+        data: searchData,
+        pagedData: searchData,
+        totalRecords: searchData.length
+    }, () => {
+        if (this.pagination.enabled) {
+            this.onGotoPage(1);
+        }
+    });
+  }
 
   render() {
     return (
       <div className={this.props.className}>
+        {this.renderToolbar()}
         {this.renderTable()}
       </div>
     )
