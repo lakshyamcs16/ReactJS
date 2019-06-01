@@ -4,7 +4,7 @@ import './datatable.css';
 
 export default class DataTable extends React.Component {
   _preSearchData = null
-  
+
   constructor(props) {
     super(props);
 
@@ -42,7 +42,7 @@ export default class DataTable extends React.Component {
 
         return (
           <th key={cleanTitle}
-              ref={(th) => this[cleanTitle] = th}
+              ref={(th) => {this[cleanTitle] = th}}
               style={{width: width}}
               data-col={cleanTitle}
               onDragStart={(e) => this.onDragStart(e, index)}
@@ -53,7 +53,7 @@ export default class DataTable extends React.Component {
               </span>
           </th>
         );
-    });
+    }, this);
 
     return headerView;
   }//renderTableHeader
@@ -79,7 +79,7 @@ export default class DataTable extends React.Component {
               }
             }
             if (this.props.edit) {
-              
+
               if (header.dataType && (header.dataType === "number" ||
                   header.dataType === "string") &&
                   header.accessor !== this.keyField) {
@@ -99,14 +99,14 @@ export default class DataTable extends React.Component {
                     {content}
                   </td>
             );
-        });
+        }, this);
 
         return (
               <tr key={rowIdx}>
                 {tds}
               </tr>
         );
-    });
+    }, this);
 
     return contentView;
   }//renderContent ended
@@ -128,7 +128,7 @@ export default class DataTable extends React.Component {
               </tr>
           </thead>
           <tbody onDoubleClick={this.onShowEditor}>
-            {/* {this.renderSearch()} */}
+            {this.renderSearch()}
             {contentView}
           </tbody>
       </table>
@@ -181,7 +181,7 @@ export default class DataTable extends React.Component {
             </td>
         );
 
-    });
+    }, this);
 
     return (
         <tr onChange={this.onSearch}>
@@ -247,14 +247,14 @@ export default class DataTable extends React.Component {
             rowId: id,
             cell: e.target.cellIndex
         }
-    })  
-  } 
+    })
+  }
   onUpdate = (e) => {
     e.preventDefault();
     let input = e.target.firstChild;
     let header = this.state.headers[this.state.edit.cell];
-    let rowId = this.state.edit.rowId;   
-    
+    let rowId = this.state.edit.rowId;
+
     this.setState({
         edit: null
     });
