@@ -128,7 +128,7 @@ export default class DataTable extends React.Component {
               </tr>
           </thead>
           <tbody onDoubleClick={this.onShowEditor}>
-            {this.renderSearch()}
+            {/* {this.renderSearch()} */ }
             {contentView}
           </tbody>
       </table>
@@ -328,7 +328,7 @@ export default class DataTable extends React.Component {
   render() {
     return (
       <div className={this.props.className}>
-        {this.renderToolbar()}
+        {/* {this.renderToolbar()} */}
         {this.renderTable()}
       </div>
     )
