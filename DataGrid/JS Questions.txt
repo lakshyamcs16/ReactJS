@@ -1,0 +1,29 @@
+1. Hoisting, Closure, Scoping
+2. Event loop
+3. Promises
+4. detach vs. remove
+5. difference between .onClick and .on('click')
+6. 
+
+   OUTPUT QUESTIONS:
+Diff. between var xyz = function() {} vs. function abc() {}
+
+abc();
+xyz();
+
+var xyz = function() {
+	console.log('xyz');
+}
+
+function abc() {
+	console.log('abc');
+}
+
+Output: 
+abc 
+xyz not a function error
+
+
+
+
+
