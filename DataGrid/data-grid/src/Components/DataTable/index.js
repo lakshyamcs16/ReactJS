@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './datatable.css';
+import Pagination from '../Pagination';
 
 export default class DataTable extends React.Component {
   _preSearchData = null
@@ -16,11 +17,15 @@ export default class DataTable extends React.Component {
       sortby: null,
       descending: null,
       search: true,
+      pageLength: this.props.pagination.pageLength || 5,
+      currentPage: 1,
     }
 
     this.keyField = props.keyField || "id";
     this.noData = props.noData || "No records found!";
     this.width = props.width || "100%";
+    this.pagination = this.props.pagination || {};
+
   }//constructor ended
 
   renderTableHeader = () => {
@@ -60,7 +65,7 @@ export default class DataTable extends React.Component {
 
   renderContent = () => {
     let {headers} = this.state;
-    let data = this.state.data;
+    let data = this.pagination ? this.state.pagedData : this.state.data;
 
     let contentView = data.map((row, rowIdx) => {
         let id = row[this.keyField];
@@ -237,6 +242,8 @@ export default class DataTable extends React.Component {
           data,
           sortby: colIndex,
           descending
+      },() => {
+        this.onGotoPage(this.state.currentPage);
       });
   }
   onShowEditor = (e) => {
@@ -325,9 +332,52 @@ export default class DataTable extends React.Component {
     });
   }
 
+  getPagedData = (pageNo, pageLength) => {
+    let startOfRecord = (pageNo - 1) * pageLength;
+    let endOfRecord = startOfRecord + pageLength;
+
+    let data = this.state.data;
+    let pagedData = data.slice(startOfRecord, endOfRecord);
+
+    return pagedData;
+  }
+
+  onPageLengthChange = (pageLength) => {
+      this.setState({
+          pageLength: parseInt(pageLength, 10)
+      }, () => {
+          this.onGotoPage(this.state.currentPage);
+      });
+  }
+
+  onGotoPage = (pageNo) => {
+      let pagedData = this.getPagedData(pageNo, this.state.pageLength);
+      this.setState({
+          pagedData: pagedData,
+          currentPage: pageNo
+      });
+  }
+
+  componentDidMount() {
+      if(this.pagination.enabled) {
+          this.onGotoPage(this.state.currentPage);
+      }
+  }
+
   render() {
     return (
       <div className={this.props.className}>
+        { this.pagination.enabled &&
+            <Pagination 
+                type={this.props.pagination.type}
+                totalRecords={this.state.data.length}
+                pageLength={this.pagination.pageLength}
+                onPageLengthChange={this.onPageLengthChange}
+                onGotoPage={this.onGotoPage}
+                currentPage={this.state.currentPage}
+            />
+
+        }
         {/* {this.renderToolbar()} */}
         {this.renderTable()}
       </div>
