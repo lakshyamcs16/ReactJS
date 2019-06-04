@@ -364,6 +364,21 @@ export default class DataTable extends React.Component {
       }
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.data.length != prevState.data.length) {
+            return {
+                headers: nextProps.headers,
+                data: nextProps.data,
+                sortby: prevState.sortby,
+                descending: prevState.descending,
+                search: prevState.search,
+                currentPage: 1,
+                pagedData: nextProps.data,
+            }
+        }
+        return null;
+    }
+    
   render() {
     return (
       <div className={this.props.className}>
