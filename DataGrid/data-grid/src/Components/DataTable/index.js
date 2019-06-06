@@ -378,12 +378,12 @@ export default class DataTable extends React.Component {
         }
         return null;
     }
-    
+
   render() {
     return (
       <div className={this.props.className}>
         { this.pagination.enabled &&
-            <Pagination 
+            <Pagination
                 type={this.props.pagination.type}
                 totalRecords={this.state.data.length}
                 pageLength={this.pagination.pageLength}

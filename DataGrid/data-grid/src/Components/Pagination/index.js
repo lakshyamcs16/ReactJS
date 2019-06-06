@@ -26,7 +26,7 @@ export default class Pagination extends Component {
     onGotoPage = (pageNo) => {
         if(pageNo === this.state.currentPage)
             return;
-        
+
         if(this.currentPageInput) {
             this.currentPage.value = pageNo;
         }
@@ -41,7 +41,7 @@ export default class Pagination extends Component {
     _getPaginationButtons = (text) => {
         let className = '.pagination-btn';
 
-        if(this.state.currentPage == text) {
+        if(this.state.currentPage === text) {
             className += ' current-page';
         }
 
@@ -70,9 +70,9 @@ export default class Pagination extends Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.currentPage != prevState.currentPage) {
+        if (nextProps.currentPage !== prevState.currentPage) {
             return {
-               currentPage: nextProps.currentPage 
+               currentPage: nextProps.currentPage
             }
         }
         return null;
