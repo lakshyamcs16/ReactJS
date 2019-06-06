@@ -76,7 +76,7 @@ class App extends Component {
           keyField="id"
           pagination={{
             enabled: true,
-            pageLength: 10,
+            pageLength: 5,
             type: "long"
           }}
           edit={true}

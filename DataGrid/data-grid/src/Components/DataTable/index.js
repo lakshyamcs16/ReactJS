@@ -342,9 +342,14 @@ export default class DataTable extends React.Component {
     return pagedData;
   }
 
-  onPageLengthChange = (pageLength) => {
+  onPageLengthChange = (pageLength, currentPage) => {
+      if(currentPage > pageLength) {
+          currentPage = pageLength;
+      }
+
       this.setState({
-          pageLength: parseInt(pageLength, 10)
+          pageLength: parseInt(pageLength, 10),
+          currentPage: currentPage
       }, () => {
           this.onGotoPage(this.state.currentPage);
       });
@@ -365,7 +370,7 @@ export default class DataTable extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.data.length != prevState.data.length) {
+        if (nextProps.data.length !== prevState.data.length) {
             return {
                 headers: nextProps.headers,
                 data: nextProps.data,
@@ -386,7 +391,7 @@ export default class DataTable extends React.Component {
             <Pagination
                 type={this.props.pagination.type}
                 totalRecords={this.state.data.length}
-                pageLength={this.pagination.pageLength}
+                pageLength={this.state.pageLength}
                 onPageLengthChange={this.onPageLengthChange}
                 onGotoPage={this.onGotoPage}
                 currentPage={this.state.currentPage}

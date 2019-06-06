@@ -10,7 +10,7 @@ export default class Pagination extends Component {
     }
 
     onPageLengthChange = () => {
-        this.props.onPageLengthChange(this.pageLengthInput.value);
+        this.props.onPageLengthChange(this.pageLengthInput.value, this.state.currentPage);
     }
 
     onPrevPage = () => {
@@ -39,7 +39,7 @@ export default class Pagination extends Component {
     }
 
     _getPaginationButtons = (text) => {
-        let className = '.pagination-btn';
+        let className = 'site';
 
         if(this.state.currentPage === text) {
             className += ' current-page';
@@ -90,7 +90,7 @@ export default class Pagination extends Component {
                            min="1"
                            ref={(input) => this.pageLengthInput = input}
                            defaultValue={this.props.pageLength || 5}
-                           onChange={this.onPageLengthChange}
+                           onChange={this.onPageLengthChange.bind(this)}
                     />
                 </span>
             </Fragment>
@@ -98,17 +98,17 @@ export default class Pagination extends Component {
 
         let prevButton = (
             <button key="prev"
-                    className="pagination-btn prev"
+                    className="back"
                     onClick={this.onPrevPage}>
-                    {"<"}
+                    {""}
             </button>
         );
 
         let nextButton = (
-            <button key="prev"
-                    className="pagination-btn next"
+            <button key="next"
+                    className="button"
                     onClick={this.onNextPage}>
-                    {">"}
+                    {""}
             </button>
         );
 
