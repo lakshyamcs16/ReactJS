@@ -135,3 +135,49 @@ export function getQuickSortAnimations(array) {
   quickSort(array, 0, array.length - 1);
 
 }
+
+/* HEAP SORT
+function leftChild(i) {
+    return 2 * i + 1;
+}
+
+function rightChild(i) {
+    return 2 * i + 2 ;
+}
+
+function heapify(a, n, i) {
+    let left = leftChild(i);
+    let right = rightChild(i);
+    let max = i;
+
+    if(left<n && a[max] < a[left])
+        max = left
+    if(right<n && a[max] < a[right])
+        max = right
+    
+    if(max != i) {
+        let temp = a[max];
+        a[max] = a[i];
+        a[i] = temp;
+
+        heapify(a, n, max)
+    }
+}
+
+function sort() {
+    { 
+        let n = a.length; 
+  
+        for (let i = n / 2 - 1; i >= 0; i--) 
+            heapify(a, n, i); 
+  
+        for (let i=n-1; i>=0; i--) 
+        { 
+            let temp = a[0]; 
+            a[0] = a[i]; 
+            a[i] = temp; 
+  
+            heapify(a, i, 0); 
+        } 
+    } 
+} */
