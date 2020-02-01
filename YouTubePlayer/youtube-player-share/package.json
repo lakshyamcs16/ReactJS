@@ -1,12 +1,14 @@
 {
-  "name": "youtube-player",
+  "name": "youtube-player-share",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "0.9.x",
-    "youtube-api-search": "0.0.5"
+    "youtube-api-search": "0.0.5",
+    "youtube-api-v3-search": "^1.2.1",
+    "yt-player": "^3.4.3"
   },
   "devDependencies": {},
   "scripts": {

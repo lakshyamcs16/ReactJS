@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import SearchBar from './Components/search_bar';
-import YTSearch from 'youtube-api-search';
+import searchYoutube from 'youtube-api-v3-search';
+const YTPlayer = require('yt-player')
 import VideoList from './Components/video_list';
 import VideoDetail from './Components/video_detail'; 
 
-const API_KEY = 'AIzaSyCapDbb_bL0zI0yH21juUDJivprNg10tkI';
-
+const API_KEY = 'AIzaSyBdUY8BLhNYn7OLEd_e7gAVQ_2Mz7_FyDI';
+const opts = {
+  width: 1100,
+  height: 615,
+  autoplay: true,
+  keyboard: true
+}
 class App extends Component {
   constructor(props) {
     super(props);
@@ -15,16 +21,26 @@ class App extends Component {
       selectedVideo: null
     }
 
-    this.videosearch('Con Calma');
+    this.videosearch('IDGAF');
   }
 
+  setPlayer() {
+    const player = new YTPlayer('#player', opts);
+
+    player.load(this.state.selectedVideo.id.videoId);
+    player.setVolume(100);
+    player.on('ended', () => {
+      player.load(this.state.selectedVideo.id.videoId, true);
+    })
+  }
+  
   videosearch = (term) => {
-    YTSearch({key: API_KEY, term: term}, (data) => {
+    searchYoutube(API_KEY, {part: 'snippet', type: 'video', q: term}, (code, data) => {
         console.log(data);
         this.setState({
-          videos: data,
-          selectedVideo: data[0]
-        });
+          videos: data.items,
+          selectedVideo: data.items[0]
+        }, this.setPlayer);
     });
   }
 
