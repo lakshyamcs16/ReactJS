@@ -12,20 +12,23 @@ const opts = {
   autoplay: true,
   keyboard: true
 }
+var player;
 class App extends Component {
   constructor(props) {
     super(props);
     
     this.state = {
       videos : [],
-      selectedVideo: null
+      selectedVideo: null,
+      isFirstVideo: true
     }
 
     this.videosearch('IDGAF');
   }
 
   setPlayer() {
-    const player = new YTPlayer('#player', opts);
+    if(this.state.isFirstVideo)
+      player = new YTPlayer('#player', opts);
 
     player.load(this.state.selectedVideo.id.videoId);
     player.setVolume(100);
@@ -50,7 +53,7 @@ class App extends Component {
       <SearchBar onSearchTermChange={searchTerm => this.videosearch(searchTerm)}/>
       <VideoDetail video={this.state.selectedVideo}></VideoDetail>
       <VideoList 
-        onVideoSelect={userSelected => this.setState({ selectedVideo: userSelected })}
+        onVideoSelect={userSelected => this.setState({ selectedVideo: userSelected, isFirstVideo: false }, this.setPlayer)}
         videos={this.state.videos}></VideoList>
       </div>
     );
