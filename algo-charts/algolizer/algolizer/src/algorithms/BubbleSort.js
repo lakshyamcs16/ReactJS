@@ -29,12 +29,12 @@ class BubbleSort extends Component {
     }
     
     sortArray = () => {
-        console.log(this.state.data);
-        debugger;
-        var _data = [...this.state.data];
-        var length = _data.length;
+        console.log(this.state.data);  
+        this.props.setSortState();     
         var i = 0; var j = 0;
         var intr = setInterval(() => {
+            var _data = [...this.state.data];
+            var length = _data.length;
             if (i < length) {
                 if (j < length - i - 1) {
 
@@ -77,7 +77,7 @@ class BubbleSort extends Component {
                 document.bgColor = "black";
                 clearInterval(intr);
             }
-        }, 5);
+        }, 1000);
     }
     render() {
 
