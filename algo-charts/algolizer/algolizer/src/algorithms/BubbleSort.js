@@ -76,7 +76,7 @@ class BubbleSort extends Component {
                 })
                 clearInterval(intr);
             }
-        }, 50);
+        }, 1000);
     }
     render() {
 

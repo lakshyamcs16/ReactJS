@@ -11,7 +11,7 @@ class Visulizer extends React.Component {
     this.state = {
       data: [15, 22, 9, 23, 15, 4, 18, 22, 17, 21],
       color: ["green", "green", "green", "green", "green", "green", "green", "green", "green", "green"],
-      size: 10,
+      size: 99,
       sortNow: false
     }
     this.getDataArraySize = this.getDataArraySize.bind(this);
@@ -59,7 +59,14 @@ class Visulizer extends React.Component {
       <>
       <Slider setSize = {this.getDataArraySize} />
       <SortButton handleSubmit = {this.handleSubmit} />
+
       <InsertionSort data={this.state.data} color={this.state.color} sortNow = {this.state.sortNow} setSortState = {this.handleSetSortState} />
+      <BubbleSort 
+      data={this.state.data} 
+      color={this.state.color} 
+      sortNow = {this.state.sortNow} 
+      setSortState = {this.handleSortState}/>
+
       </>
     );
   };
