@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Bar from '../user-interface/Bar';
 
-class BubbleSort extends Component {
+class InsertionSort extends Component {
 
     constructor(props) {
         super(props);
@@ -28,47 +28,57 @@ class BubbleSort extends Component {
         }
     }
     
+    // int n = arr.length; 
+    // for (int i = 1; i < n; ++i) { 
+    //     int key = arr[i]; 
+    //     int j = i - 1; 
+
+    //     /* Move elements of arr[0..i-1], that are 
+    //        greater than key, to one position ahead 
+    //        of their current position */
+    //     while (j >= 0 && arr[j] > key) { 
+    //         arr[j + 1] = arr[j]; 
+    //         j = j - 1; 
+    //     } 
+    //     arr[j + 1] = key; 
+    // } 
+
+
     sortArray = () => {
         console.log(this.state.data);
         this.props.setSortState(false);
-        var i = 0; var j = 0;
+        var i = 1; var j = 0;
         var intr = setInterval(() => {
             var _data = [...this.state.data];
             var length = _data.length;
             if (i < length) {
-                if (j < length - i - 1) {
+                var key = _data[i];
+                j = i - 1;
+                if (j >= 0 && _data[j] > key) {
 
                     let comparisonColors = [...this.state.color];
-
-                    if (_data[j] > _data[j + 1]) {
-                        var temp = _data[j];
-                        _data[j] = _data[j + 1];
-                        _data[j + 1] = temp;
-                    }
-                    console.log("Setting state");
+                    _data[j + 1] = _data[j]; 
                     
+                    comparisonColors[i] = 'red';
+                    comparisonColors[j] = 'red';
+
                     this.setState({
                         data: _data,
                         color: comparisonColors
-                    }, () => {
-                        comparisonColors[j] = 'red';
-                        comparisonColors[j + 1] = 'red';
-
-                        this.setState({
-                            color: comparisonColors
-                        }, () => {
-                            comparisonColors[j] = 'green';
-                            comparisonColors[j + 1] = 'green';
-                        });
-
-
                     });
 
-                    j++;
+                    j = j - 1;
 
                 } else {
+                    _data[j + 1] = key; 
+                    let comparisonColors = [...this.state.color];
+                    comparisonColors[i] = 'red';
+                    comparisonColors[j+1] = 'red';
+                    this.setState({
+                        data: _data,
+                        color: comparisonColors
+                    });
                     i++;
-                    j = 0;
                 }
             } else {
                 this.setState({
@@ -78,6 +88,7 @@ class BubbleSort extends Component {
             }
         }, 50);
     }
+
     render() {
 
         let currentDataArr = this.state.data;
@@ -92,4 +103,4 @@ class BubbleSort extends Component {
     }
 }
 
-export default BubbleSort;
+export default InsertionSort;
