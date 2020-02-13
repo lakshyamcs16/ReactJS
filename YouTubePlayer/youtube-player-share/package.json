@@ -6,10 +6,13 @@
     "4lyrics": "^1.1.61",
     "azlyrics": "^2.0.0",
     "cheerio": "^1.0.0-rc.3",
+    "genius-lyrics": "^1.0.9",
     "react": "^16.8.6",
     "react-content-loader": "^5.0.1",
     "react-dom": "^16.8.6",
     "react-scripts": "0.9.x",
+    "slyrics": "^0.1.40",
+    "solenolyrics": "^5.0.0",
     "youtube-api-search": "0.0.5",
     "youtube-api-v3-search": "^1.2.1",
     "yt-player": "^3.4.3"

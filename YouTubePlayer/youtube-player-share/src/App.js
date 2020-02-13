@@ -10,7 +10,7 @@ import ContentLoader from 'react-content-loader'
 
 const API_KEY = 'AIzaSyBdUY8BLhNYn7OLEd_e7gAVQ_2Mz7_FyDI';
 const opts = {
-  width: 990,
+  width: "100%",
   height: 615,
   autoplay: true,
   keyboard: true
@@ -43,8 +43,8 @@ class App extends Component {
       player = new YTPlayer('#player', opts);
 
     player.load(this.state.selectedVideo.id.videoId);
-    player.setVolume(100);
-    player.play()
+    player.setVolume(70);
+    //player.play()
     player.on('ended', () => {
       player.load(this.state.selectedVideo.id.videoId, true);
     })
@@ -54,7 +54,7 @@ class App extends Component {
     searchYoutube(API_KEY, {part: 'snippet', type: 'video', q: term}, (code, data) => {
         console.log(data);
         this.setState({
-          //videos: data.items,
+          videos: data.items,
           selectedVideo: data.items[0]
         }, this.setPlayer);
     });
@@ -63,7 +63,7 @@ class App extends Component {
   getVideoListTemplate() {
     var items = [];
     for(var i =0; i < 5; i++) {
-      items.push(MyLoader())
+      items.push(<li key={i}>{MyLoader()}</li>);
     }
     return items;
   }

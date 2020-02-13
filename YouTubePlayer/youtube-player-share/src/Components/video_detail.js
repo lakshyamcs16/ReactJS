@@ -1,20 +1,22 @@
 import React,  { useState, useEffect } from 'react';
-const lyrics = require('4lyrics');
+const Lyrics = require('slyrics')
+const lyrics = new Lyrics()
 
+async function test (provider, title) {
+    const start = new Date().getTime()
+    const result = await lyrics.get(provider, title)
+    console.log(result)
+    console.log(result.result)
+    console.log(new Date().getTime() - start + 'ms')
+}
 
+const url = 'https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?format=jsonp&callback=callback&apikey=dba33df1deeef4f0955942ffc89d0185&q_track='
 const VideoDetail = (props) => {
     const video = props.video;
     const [lyric, setLyric] = useState({lyrics: null});
 
     useEffect(()=>{
-        lyrics.lyricslive.getURL('up&up')
-            .then(r => lyrics.lyricslive.getLyrics(r))
-            .then((r) => {
-                setLyric({
-                    lyrics: r
-                })
-            })
-            .catch(console.error);
+        test('melon', 'idgaf')
     })
 
     if(!video) {
