@@ -4,14 +4,14 @@ import searchYoutube from 'youtube-api-v3-search';
 const YTPlayer = require('yt-player')
 import VideoList from './Videos/video_list';
 import VideoDetail from './Videos/video_detail'; 
-import {setFirstVideo, setSelectedVideo, setupPlayer} from '../Redux';
+import {setupPlayer} from '../Redux';
 import {connect} from 'react-redux';
 
 
 const API_KEY = 'AIzaSyBdUY8BLhNYn7OLEd_e7gAVQ_2Mz7_FyDI';
 const opts = {
-  width: 1100,
-  height: 615,
+  width: 1000,
+  height: 580,
   autoplay: true,
   keyboard: true
 }
@@ -22,14 +22,15 @@ class YTShare extends Component {
     this.videosearch('IDGAF');
   }
 
-  setPlayer() {
-    if(this.props.isFirstVideo)
+  setPlayer(isFirstVideo, selectedVideo) {
+    if(isFirstVideo || (this && this.props.isFirstVideo))
       player = new YTPlayer('#player', opts);
 
-    player.load(this.props.selectedVideo.id.videoId);
+    var load = selectedVideo? selectedVideo.id.videoId : this.props.selectedVideo.id.videoId;
+    player.load(load);
     player.setVolume(100);
     player.on('ended', () => {
-      player.load(this.props.selectedVideo.id.videoId, true);
+      player.load(load, true);
     })
   }
   
@@ -50,9 +51,10 @@ class YTShare extends Component {
         <VideoList 
           onVideoSelect={
             userSelected => {
-            this.props.dispatch(setSelectedVideo(userSelected)); 
-            this.props.dispatch(setFirstVideo(false)); 
-            this.setPlayer();
+            this.props.dispatch(setupPlayer(this.props.videos, userSelected, false, this.setPlayer));
+            // this.props.dispatch(setSelectedVideo(userSelected)); 
+            // this.props.dispatch(setFirstVideo(false)); 
+            // this.setPlayer();
           }}
           videos={this.props.videos}></VideoList>
         </div>

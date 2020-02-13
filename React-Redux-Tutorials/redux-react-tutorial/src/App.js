@@ -1,23 +1,39 @@
 import React, { Component } from 'react';
-import {Provider} from 'react-redux';
 import './App.css';
-import store from './redux/store'; 
-import HooksCakeContainer from './components/HooksCakeContainer';
-import IceCreamContainer from './components/IceCreamContainer';
-import CakeContainer from './components/CakeContainer';
-import UsersContainer from './components/UsersContainer';
+import RandomTextContainer from './components/RandomTextContainer';
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      text: null
+    }
+  }
+
+  clearText = () => {
+    this.setState({
+      text: null
+    })
+  }
+
+  setText = (text) => {
+    this.setState({
+      text: text
+    })
+  }
+
   render() {
     return (
-      <Provider store={store}> 
+      // <Provider store={store}> 
         <div className="App">
-          <UsersContainer />
+          {/* <UsersContainer /> */}
           {/* <HooksCakeContainer />
           <IceCreamContainer />
           <CakeContainer /> */}
-        </div>
-      </Provider>
+          <RandomTextContainer text={this.state.text} clear={this.clearText} set={this.setText} />
+        </div>       
+      // </Provider>
+      
     );
   }
 }

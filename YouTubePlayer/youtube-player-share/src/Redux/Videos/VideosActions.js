@@ -26,6 +26,6 @@ export const setupPlayer = (videos = [], selectedVideo = null, isFirstVideo = fa
         dispatch(setVideos(videos));
         dispatch(setSelectedVideo(selectedVideo))
         dispatch(setFirstVideo(isFirstVideo))
-        setPlayer()
+        setPlayer(isFirstVideo, selectedVideo);
     }
 }
