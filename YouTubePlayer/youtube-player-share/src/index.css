@@ -25,3 +25,8 @@
 .list-group-item:hover{
   background-color: #eee;
 }
+
+
+svg.list_placeholders {
+  margin-bottom: 32px !important;
+}

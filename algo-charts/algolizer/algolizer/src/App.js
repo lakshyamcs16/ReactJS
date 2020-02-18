@@ -3,6 +3,7 @@ import './App.css';
 import Slider from './user-interface/Slider';
 import SortButton from './user-interface/Button'
 import BubbleSort from './algorithms/BubbleSort';
+import InsertionSort from './algorithms/InsertionSort';
 
 class Visulizer extends React.Component {
   constructor(props) {
@@ -47,9 +48,9 @@ class Visulizer extends React.Component {
     })
   }
 
-  handleSortState = () => {
+  handleSetSortState = (sort) => {
     this.setState({
-      sortNow: false
+      sortNow: sort
     })
   }
 
@@ -58,11 +59,14 @@ class Visulizer extends React.Component {
       <>
       <Slider setSize = {this.getDataArraySize} />
       <SortButton handleSubmit = {this.handleSubmit} />
+
+      <InsertionSort data={this.state.data} color={this.state.color} sortNow = {this.state.sortNow} setSortState = {this.handleSetSortState} />
       <BubbleSort 
       data={this.state.data} 
       color={this.state.color} 
       sortNow = {this.state.sortNow} 
       setSortState = {this.handleSortState}/>
+
       </>
     );
   };
