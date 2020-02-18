@@ -2,19 +2,18 @@ import React, { Component } from 'react';
 import Paper from '@material-ui/core/Paper';
 import {
   SelectionState,
-  PagingState,
-  IntegratedPaging,
   IntegratedSelection,
   TreeDataState,
-  CustomTreeData
+  CustomTreeData,
+  SortingState,
+  IntegratedSorting
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
   Table,
   TableHeaderRow,
   TableTreeColumn,
-  TableSelection,
-  PagingPanel,
+  TableSelection
 } from '@devexpress/dx-react-grid-material-ui';
 
 const URL = "https://private-1a09f-analytics43.apiary-mock.com/document/longshort/summary";
@@ -24,6 +23,9 @@ const getChildRows = (row, rootRows) => {
     return childRows.length ? childRows : null;
 };
 
+const compareNumbers = (a, b) => {
+    return a-b;
+}
 class FSGrid extends Component {
 
     constructor(props) {
@@ -32,7 +34,9 @@ class FSGrid extends Component {
             rows: [],
             columns: [],
             selection: [],
-            tableColumnExtensions: [ { columnName: 'name', width: 300 } ]
+            tableColumnExtensions: [ { columnName: 'Name', width: 300 } ],
+            integratedSortingColumnExtensions: [ { columnName: 'FY 2015', compare: compareNumbers } ],
+            pageSizes: [5, 10, 15, 0]
         }
     }
 
@@ -48,8 +52,8 @@ class FSGrid extends Component {
         .then(res => {
             this.setState({
                 rows: res.documents[0].data,
-                columns: [  { name: 'id'},
-                            { name: 'name'},
+                columns: [  
+                            { name: 'Name'},
                             { name: 'FY 2015'},
                             { name: 'FY 2016'},
                             { name: 'FY 2017'},
@@ -67,17 +71,32 @@ class FSGrid extends Component {
                     <Grid
                     rows={this.state.rows}
                     columns={this.state.columns}
-                    >
+                    >                   
+                    <SortingState
+                        defaultSorting={[{ columnName: 'Name', direction: 'asc' }]}
+                    />
+                    <IntegratedSorting columnExtensions = {this.state.integratedSortingColumnExtensions}/>                    
                     <TreeDataState />
                     <CustomTreeData
-                    getChildRows={getChildRows}
+                        getChildRows={getChildRows}
                     />
+                                     
                     <Table
                     columnExtensions={this.state.tableColumnExtensions}
-                    />
-                    <TableHeaderRow />
+                    />                    
+                    <TableHeaderRow showSortingControls /> 
+                    <SelectionState
+                        selection={this.state.selection}
+                        onSelectionChange={this.setSelection}
+                    /> 
+                    <IntegratedSelection />
+                    <TableSelection
+                        selectByRowClick
+                        highlightRow
+                        showSelectionColumn={true}
+                    />                    
                     <TableTreeColumn
-                    for="name"
+                        for="Name"
                     />
                     </Grid>
                 </Paper>
