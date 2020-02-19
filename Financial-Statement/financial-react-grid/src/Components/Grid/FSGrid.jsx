@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
 import Paper from '@material-ui/core/Paper';
 import {
-  SelectionState,
-  IntegratedSelection,
-  TreeDataState,
-  CustomTreeData,
-  SortingState,
-  IntegratedSorting
+    SelectionState,
+    IntegratedSelection,
+    TreeDataState,
+    CustomTreeData,
+    SortingState,
+    IntegratedSorting,
+    SearchState,
+    IntegratedFiltering
 } from '@devexpress/dx-react-grid';
 import {
-  Grid,
-  Table,
-  TableHeaderRow,
-  TableTreeColumn,
-  TableSelection
+    Grid,
+    Table,
+    Toolbar,
+    TableHeaderRow,
+    TableTreeColumn,
+    TableSelection,
+    SearchPanel
 } from '@devexpress/dx-react-grid-material-ui';
 
 const URL = "https://private-1a09f-analytics43.apiary-mock.com/document/longshort/summary";
@@ -24,7 +28,7 @@ const getChildRows = (row, rootRows) => {
 };
 
 const compareNumbers = (a, b) => {
-    return a-b;
+    return a - b;
 }
 class FSGrid extends Component {
 
@@ -34,9 +38,11 @@ class FSGrid extends Component {
             rows: [],
             columns: [],
             selection: [],
-            tableColumnExtensions: [ { columnName: 'Name', width: 300 } ],
-            integratedSortingColumnExtensions: [ { columnName: 'FY 2015', compare: compareNumbers } ],
-            pageSizes: [5, 10, 15, 0]
+            tableColumnExtensions: [{ columnName: 'Name', width: 300 }],
+            integratedSortingColumnExtensions: [{ columnName: 'FY 2015', compare: compareNumbers }],
+            pageSizes: [5, 10, 15, 0],
+            defaultExpandedRowIds: [0],
+            searchValue: ''
         }
     }
 
@@ -46,58 +52,74 @@ class FSGrid extends Component {
         })
     }
 
+    setSearchValue = (val) => {
+        this.setState({
+            searchValue: val
+        })
+    }
+
     componentDidMount() {
         fetch(URL)
-        .then(e => e.json())
-        .then(res => {
-            this.setState({
-                rows: res.documents[0].data,
-                columns: [  
-                            { name: 'Name'},
-                            { name: 'FY 2015'},
-                            { name: 'FY 2016'},
-                            { name: 'FY 2017'},
-                            { name: 'FY 2018'},
-                            { name: 'FY 2019'}
-                        ]
-            });
-        })
+            .then(e => e.json())
+            .then(res => {
+                this.setState({
+                    rows: res.documents[0].data,
+                    columns: [
+                        { name: 'Name' },
+                        { name: 'FY 2015' },
+                        { name: 'FY 2016' },
+                        { name: 'FY 2017' },
+                        { name: 'FY 2018' },
+                        { name: 'FY 2019' }
+                    ]
+                });
+            })
     }
 
     render() {
         return (
             <div>
-               <Paper>
-                    <Grid
-                    rows={this.state.rows}
-                    columns={this.state.columns}
-                    >                   
-                    <SortingState
-                        defaultSorting={[{ columnName: 'Name', direction: 'asc' }]}
-                    />
-                    <IntegratedSorting columnExtensions = {this.state.integratedSortingColumnExtensions}/>                    
-                    <TreeDataState />
-                    <CustomTreeData
-                        getChildRows={getChildRows}
-                    />
-                                     
-                    <Table
-                    columnExtensions={this.state.tableColumnExtensions}
-                    />                    
-                    <TableHeaderRow showSortingControls /> 
-                    <SelectionState
-                        selection={this.state.selection}
-                        onSelectionChange={this.setSelection}
-                    /> 
-                    <IntegratedSelection />
-                    <TableSelection
-                        selectByRowClick
-                        highlightRow
-                        showSelectionColumn={true}
-                    />                    
-                    <TableTreeColumn
-                        for="Name"
-                    />
+                    <Paper>
+                        <Grid
+                            rows={this.state.rows}
+                            columns={this.state.columns}
+                        >
+                        <SortingState
+                            defaultSorting={[{ columnName: 'Name', direction: 'asc' }]}
+                        />
+                        <IntegratedSorting columnExtensions={this.state.integratedSortingColumnExtensions} />
+                        <SearchState 
+                            value={this.state.searchValue}
+                            onValueChange={this.setSearchValue}
+                        />
+                        <TreeDataState defaultExpandedRowIds={this.state.defaultExpandedRowIds}/>
+                        <CustomTreeData
+                            getChildRows={getChildRows}
+                        />
+                        
+                        <IntegratedFiltering />
+
+                        <Table
+                            columnExtensions={this.state.tableColumnExtensions}
+                        />
+
+                        <SelectionState
+                            selection={this.state.selection}
+                            onSelectionChange={this.setSelection}
+                        />
+                        <IntegratedSelection />
+                        <TableSelection
+                            selectByRowClick
+                            highlightRow
+                            showSelectionColumn={true}
+                        />
+                        <TableHeaderRow showSortingControls />
+                        <Toolbar />
+                        <SearchPanel />
+                        <TableTreeColumn
+                            for="Name"
+                        />
+                        
                     </Grid>
                 </Paper>
             </div>
