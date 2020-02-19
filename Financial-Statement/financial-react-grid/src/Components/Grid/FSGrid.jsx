@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import CurrencyEditor from './FilterEditors/CurrencyEditor';
+import FilterIcon from './FilterEditors/FilterIcon';
 import Paper from '@material-ui/core/Paper';
 import {
     SelectionState,
@@ -8,7 +10,9 @@ import {
     SortingState,
     IntegratedSorting,
     SearchState,
-    IntegratedFiltering
+    IntegratedFiltering,
+    FilteringState,
+    DataTypeProvider
 } from '@devexpress/dx-react-grid';
 import {
     Grid,
@@ -17,7 +21,11 @@ import {
     TableHeaderRow,
     TableTreeColumn,
     TableSelection,
-    SearchPanel
+    TableColumnResizing,
+    SearchPanel,
+    DragDropProvider,
+    TableColumnReordering,
+    TableFilterRow
 } from '@devexpress/dx-react-grid-material-ui';
 
 const URL = "https://private-1a09f-analytics43.apiary-mock.com/document/longshort/summary";
@@ -39,7 +47,24 @@ class FSGrid extends Component {
             columns: [],
             selection: [],
             tableColumnExtensions: [{ columnName: 'Name', width: 300 }],
+            defaultColumnWidths: [{ columnName: 'Name', width: 300 },
+            { columnName: 'FY 2015', width: 200 },
+            { columnName: 'FY 2016', width: 200 },
+            { columnName: 'FY 2017', width: 200 },
+            { columnName: 'FY 2018', width: 200 },
+            { columnName: 'FY 2019', width: 200 }
+            ],
             integratedSortingColumnExtensions: [{ columnName: 'FY 2015', compare: compareNumbers }],
+            defaultColumnOrder: ['Name', 'FY 2015', 'FY 2016', 'FY 2017', 'FY 2018', 'FY 2019'],
+            currencyColumns: ['FY 2015', 'FY 2016', 'FY 2017', 'FY 2018', 'FY 2019'],
+            currencyFilterOperations: [
+                'equal',
+                'notEqual',
+                'greaterThan',
+                'greaterThanOrEqual',
+                'lessThan',
+                'lessThanOrEqual',
+            ],
             pageSizes: [5, 10, 15, 0],
             defaultExpandedRowIds: [0],
             searchValue: ''
@@ -79,24 +104,31 @@ class FSGrid extends Component {
     render() {
         return (
             <div>
-                    <Paper>
-                        <Grid
-                            rows={this.state.rows}
-                            columns={this.state.columns}
-                        >
+                <Paper>
+                    <Grid
+                        rows={this.state.rows}
+                        columns={this.state.columns}
+                    >
                         <SortingState
                             defaultSorting={[{ columnName: 'Name', direction: 'asc' }]}
                         />
                         <IntegratedSorting columnExtensions={this.state.integratedSortingColumnExtensions} />
-                        <SearchState 
+                        <SearchState
                             value={this.state.searchValue}
                             onValueChange={this.setSearchValue}
                         />
-                        <TreeDataState defaultExpandedRowIds={this.state.defaultExpandedRowIds}/>
+                        <TreeDataState defaultExpandedRowIds={this.state.defaultExpandedRowIds} />
                         <CustomTreeData
                             getChildRows={getChildRows}
                         />
-                        
+
+                        <DragDropProvider />
+                        <DataTypeProvider
+                            for={this.state.currencyColumns}
+                            availableFilterOperations={this.state.currencyFilterOperations}
+                            editorComponent={CurrencyEditor}
+                        />
+                        <FilteringState defaultFilters={[]} />
                         <IntegratedFiltering />
 
                         <Table
@@ -113,13 +145,19 @@ class FSGrid extends Component {
                             highlightRow
                             showSelectionColumn={true}
                         />
+                        <TableColumnReordering defaultOrder={this.state.defaultColumnOrder} />
+                        <TableColumnResizing defaultColumnWidths={this.state.defaultColumnWidths} />
                         <TableHeaderRow showSortingControls />
+                        <TableFilterRow
+                            showFilterSelector
+                            iconComponent={FilterIcon}
+                        />
                         <Toolbar />
                         <SearchPanel />
                         <TableTreeColumn
                             for="Name"
                         />
-                        
+
                     </Grid>
                 </Paper>
             </div>
