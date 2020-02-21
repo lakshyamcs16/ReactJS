@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import CurrencyEditor from './FilterEditors/CurrencyEditor';
 import FilterIcon from './FilterEditors/FilterIcon';
 import Paper from '@material-ui/core/Paper';
+import '../../App.css';
+
 import {
     SelectionState,
     IntegratedSelection,
@@ -30,6 +32,15 @@ import {
     TableColumnReordering,
     TableFilterRow
 } from '@devexpress/dx-react-grid-material-ui';
+import {
+    SortableContainer,
+    SortableHandle,
+    SortableElement
+  } from "react-sortable-hoc";
+
+const alignment = {
+    float: 'right'
+}
 
 const URL = "https://private-1a09f-analytics43.apiary-mock.com/document/longshort/summary";
 
@@ -51,6 +62,10 @@ const CurrencyTypeProvider = props => (
   />
 );
 
+const DragHandle = SortableHandle(({ style }) => (
+    <span style={{ ...style, ...{ cursor: "move" } }}>{"::::"}</span>
+));
+
 class FSGrid extends Component {
 
     constructor(props) {
@@ -58,6 +73,7 @@ class FSGrid extends Component {
         this.state = {
             rows: [],
             columns: [
+                { name: "drag", title: ""},
                 { name: 'Name' },
                 { name: 'FY 2015' },
                 { name: 'FY 2016' },
@@ -67,7 +83,8 @@ class FSGrid extends Component {
             ],
             selection: [],
             tableColumnExtensions: [{ columnName: 'Name', width: 300 }],
-            defaultColumnWidths: [{ columnName: 'Name', width: 300 },
+            defaultColumnWidths: [{ columnName: 'drag', width: 100 },
+                                { columnName: 'Name', width: 300 },
                                 { columnName: 'FY 2015', width: 200 },
                                 { columnName: 'FY 2016', width: 200 },
                                 { columnName: 'FY 2017', width: 200 },
@@ -88,8 +105,9 @@ class FSGrid extends Component {
             totalSummaryItems: [ {columnName: 'FY 2015', type: 'sum' }],
             treeSummaryItems: [ {columnName: 'FY 2015', type: 'sum' }],
             pageSizes: [5, 10, 15, 0],
-            defaultExpandedRowIds: [0],
-            searchValue: ''
+            defaultExpandedRowIds: [0,5],
+            searchValue: '',
+            swapIdx: []
         }
     }
 
@@ -104,6 +122,26 @@ class FSGrid extends Component {
             searchValue: val
         })
     }
+
+    onSortEnd = ({ oldIndex, newIndex }) => {
+        console.log(oldIndex+": "+newIndex);
+
+        let rP = this.state.rows;
+        let temp = rP[oldIndex];
+        rP[oldIndex] = rP[newIndex];
+        rP[newIndex] = temp;
+
+        this.setState({
+            swapIdx: [oldIndex, newIndex],
+            rows: rP
+        })
+    }
+
+    TableCell = ({ value, ...restProps }) => (
+        <Table.Cell {...restProps}>
+            {restProps.column.name === "drag" ? <DragHandle /> : <span style={alignment} className="numbers" >{value}</span> }
+        </Table.Cell>
+    );
 
     parseData = (data) => {
         debugger;
@@ -136,13 +174,15 @@ class FSGrid extends Component {
     }
 
     render() {
+        console.log('Render');
+        
         return (
             <div>
                 <Paper>
-                    <Grid
-                        rows={this.state.rows}
-                        columns={this.state.columns}
-                    >
+                        <Grid
+                            rows={this.state.rows}
+                            columns={this.state.columns}
+                        >
                         <CurrencyTypeProvider
                             for={this.state.currencyColumns}
                         />
@@ -174,6 +214,27 @@ class FSGrid extends Component {
 
                         <Table
                             columnExtensions={this.state.tableColumnExtensions}
+                            cellComponent={this.TableCell}
+                            rows={this.setRows}
+                            bodyComponent={({ row, ...restProps }) => {
+                                debugger;
+                                
+                                let rP = {...restProps};
+                                rP = rP.children;
+                                let temp = rP[this.state.swapIdx[0]];
+                                rP[this.state.swapIdx[0]] = rP[this.state.swapIdx[1]];
+                                rP[this.state.swapIdx[1]] = temp;
+
+                                const TableBody = SortableContainer(Table.TableBody);
+                                return (
+                                  <TableBody {...restProps} onSortEnd={this.onSortEnd} useDragHandle />
+                                );
+                              }}
+                              rowComponent={({ row, ...restProps }) => {
+                                debugger;
+                                const TableRow = SortableElement(Table.Row);
+                                return <TableRow {...restProps} index={this.state.rows.indexOf(row)} />;
+                              }}
                         />
 
                         <SelectionState
@@ -182,8 +243,8 @@ class FSGrid extends Component {
                         />
                         <IntegratedSelection />
                         <TableSelection
-                            selectByRowClick
-                            highlightRow
+                            // selectByRowClick
+                            // highlightRow
                             showSelectionColumn={true}
                         />
                         <TableColumnReordering defaultOrder={this.state.defaultColumnOrder} />
