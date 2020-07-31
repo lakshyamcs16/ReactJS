@@ -1,0 +1,121 @@
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+#root{
+  height: inherit;
+  overflow: auto;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.column {
+  height: 230px;
+  width: 150px;
+  margin: 10px;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.result-image {
+  height: 190px;
+  width: 100%;
+}
+
+.result-image img {
+  height: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.title {
+  height: 40px;
+  width: 100%;
+  padding: 0 20px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-size: 14px;
+  color: #343434;
+  font-weight: bold;
+}
+
+.title span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+#query {
+  background: rgba(255, 255, 255, 0.05);
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  border-right: transparent;
+  width: 100%;
+  padding: 20px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #fff;
+}
+
+#search-bar button {
+  background: rgba(255,255,255,0.05);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-right: 1px solid rgba(255,255,255,0.4);
+  border-top: 1px solid rgba(255,255,255,0.4);
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  border-left: transparent;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+}
+
+#search-bar {
+  display: grid;
+  grid-template-columns: auto 50px;
+}
+
+body {
+  height: 100vh;
+    width: 100%;
+    background: -webkit-gradient(linear, left top, right top, from(#2e51a2), to(#1b7ac2));
+    background: linear-gradient(to right, #2e51a2, #1b7ac2);
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 100px;
+    display: grid;
+    grid-template-rows: 200px auto;
+    overflow: hidden;
+}
