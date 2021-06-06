@@ -1,0 +1,27 @@
+.card-container {
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+.card-container .header {
+    display: flex;
+    padding: 0.5rem;
+    justify-content: space-between;
+    border-bottom: 1px solid;
+}
+
+.card-container .description {
+    padding: 0.5rem;
+    white-space: pre-line;
+}
+
+.card-container .header .created-at {
+    font-size: 0.6rem;
+}
+
+.card-container .header .delete-btn {
+    border: none;
+    background: #ececec;
+    cursor: pointer;
+    border-radius: 50%;
+}

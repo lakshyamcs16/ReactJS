@@ -1,0 +1,37 @@
+.wrapper {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper .inner {
+    background: #fff;
+    box-shadow: 3px 5px 12px #2d2c2c;
+    margin: 1rem;
+    opacity: 1;
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+}
+
+.wrapper .inner > div {
+    padding: 1rem;
+}
+
+.wrapper .inner .cross {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.wrapper .inner .header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid;
+}

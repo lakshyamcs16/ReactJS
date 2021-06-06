@@ -1,0 +1,41 @@
+.add-card-modal .title {
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.add-card-modal .title input {
+    width: 20rem;
+}
+
+.add-card-modal .description {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.add-card-modal .description textarea {
+    min-width: 20rem;
+    min-height: 10rem;
+    white-space: pre-wrap;
+}
+
+.add-card-modal .submit {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+}
+
+.add-card-modal label {
+    margin-right: 0.6rem;
+}
+
+#error {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    color: rgb(200, 10, 20);
+    min-height: 1rem;
+}
