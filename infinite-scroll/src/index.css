@@ -12,4 +12,6 @@ code {
 
 html, body, #root {
   height: -webkit-fill-available;
+  height: 100%;
+  height: -moz-available;
 }
