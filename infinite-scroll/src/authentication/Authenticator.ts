@@ -1,6 +1,4 @@
-interface IUser {
-    username: string | null;
-}
+import {IUser} from '../interface/IUser';
 
 class User {
     constructor(private username: string | null) {

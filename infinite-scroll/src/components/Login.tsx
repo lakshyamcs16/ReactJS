@@ -1,6 +1,6 @@
 import React from "react";
 import auth from "../authentication/Authenticator";
-import { IRoutingProps } from "./ContactList";
+import { IRoutingProps } from "../interface/IRoutingProps";
 import ContactList from "./ContactList";
 import '../styles/LoginStyle.css';
 

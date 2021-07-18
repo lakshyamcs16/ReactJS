@@ -1,15 +1,8 @@
 import React from "react";
 import auth from '../authentication/Authenticator';
-import { History, LocationState } from "history";
 import Contacts from './Contacts';
 import '../styles/ContactListStyle.css';
-
-export interface IRoutingProps {
-  history?: History<LocationState>;
-  location?: Location;
-  match?: string;
-  name: string | null;
-}
+import {IRoutingProps} from '../interface/IRoutingProps';
 
 class ContactList extends React.Component<IRoutingProps> {
   render() {

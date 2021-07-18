@@ -1,10 +1,11 @@
 import auth from "../authentication/Authenticator";
-import FlatList, { IContact } from "./FlatList";
+import FlatList from "./FlatList";
 import React from "react";
 import UserData from "../data/Users.json";
 import AdultManAvatar from '../assets/man-adult.png';
 import Loader from './Loader';
 import "../styles/ContactListStyle.css";
+import {IContact} from '../interface/IFlatList';
 
 export function debounce<T extends unknown[], U>(
     callback: (...args: T) => PromiseLike<U> | U,
@@ -18,7 +19,7 @@ export function debounce<T extends unknown[], U>(
         timer = setTimeout(() => resolve(callback(...args)), wait);
       });
     };
-  }
+}
 
 class Contacts extends React.Component<any, {renderableData: IContact[], isLoading: boolean}> {
   username = auth.getUser().getUserDetails().username;
