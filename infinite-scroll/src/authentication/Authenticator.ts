@@ -27,16 +27,16 @@ class Authenticator {
             this.authenticated = true;
             this.user.setUserDetails(username);
             window.localStorage.setItem('sessionId', username);
-            cb();
+            cb(true);
         }else{
-            window.alert('Incorrect Credentials');
+            cb(false);
         }
     }
 
     logout(cb: Function) {
         this.authenticated = false;
         window.localStorage.removeItem('sessionId');
-        cb();
+        cb(true);
     }
 
     isAuthenticated() {
