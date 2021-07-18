@@ -22,8 +22,7 @@ export default class FlatList extends React.Component<
   loadMore = (e: Event) => {
     if (
       this.props.callback &&
-      window.innerHeight + document.documentElement.scrollTop ===
-        document.scrollingElement?.scrollHeight
+      (window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 2
     ) {
       this.state.scrollCallback?.(e);
     }

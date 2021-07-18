@@ -97,7 +97,7 @@ class Contacts extends React.Component<any, {renderableData: IContact[], isLoadi
             callback={this.handleScrollCallback}
             classes="user-list-item"
           />
-          <div>{this.state.isLoading && <Loader />}</div>
+          <div style={{height: '5rem'}}>{this.state.isLoading && <Loader />}</div>
         </div>
       </div>
     );
