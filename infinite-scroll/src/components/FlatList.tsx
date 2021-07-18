@@ -22,13 +22,13 @@ export default class FlatList extends React.Component<
   loadMore = (e: Event) => {
     if (
       this.props.callback &&
-      navigator.userAgent.indexOf("Safari") !== -1 &&
+      (navigator.platform.indexOf("Mac") !== -1 || navigator.platform.indexOf("iPhone") !== -1) &&
       window.innerHeight + document.documentElement.scrollTop === document.scrollingElement?.scrollHeight
-    ) {
+    ) {      
       this.state.scrollCallback?.(e);
     } else if (
       this.props.callback &&
-      navigator.userAgent.indexOf("Safari") === -1 &&
+      (navigator.platform.indexOf("Mac") === -1 && navigator.platform.indexOf("iPhone") === -1)  &&
       window.innerHeight + window.pageYOffset >= document.body.scrollHeight - 2
     ) {
       this.state.scrollCallback?.(e);
