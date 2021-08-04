@@ -1,0 +1,8 @@
+.broken-container {
+  flex-direction: column;
+}
+
+.not-exist {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
